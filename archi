@@ -64,7 +64,7 @@ function getvar {
     while true; do
         printf "Select desired $(red "DISK") or $(red "PARTITION")"
         local options=("existing partition")
-        options+=("$(lsblk -dpnoNAME | grep -oP "/dev/vd[a-z]+|/dev/sd[a-z]+|/dev/nvme[0-9]n[0-9]+")")
+        options+=($(lsblk -dpnoNAME | grep -oP "/dev/vd[a-z]+|/dev/sd[a-z]+|/dev/nvme[0-9]n[0-9]+"))
         menu 1 "${options[@]}"
         DISK="${options[$?]}"
 
@@ -80,7 +80,7 @@ function getvar {
         else
             clear
             while true; do
-                options=("$(lsblk -lpoNAME | grep -oP "/dev/vd[a-z][0-9]+|/dev/sd[a-z][0-9]+|/dev/nvme[0-9]n[0-9]p[0-9]+")")
+                options=($(lsblk -lpoNAME | grep -oP "/dev/vd[a-z][0-9]+|/dev/sd[a-z][0-9]+|/dev/nvme[0-9]n[0-9]p[0-9]+"))
                 printf "Select $(red "ESP") partition"
                 menu 1 "${options[@]}"
                 ESP="${options[$?]}"
@@ -148,19 +148,9 @@ function baseinst {
     # shellcheck disable=SC2155
     local cpu=$(lscpu | awk '/Vendor/ {print $3}' | head -n 1)
     local pkg=(
-        base
-        base-devel
-        linux-lts
-        linux-firmware
-        efibootmgr
-        inotify-tools
-        grub-btrfs
-        snapper
-        zram-generator
-        networkmanager
-        reflector
-        openssh
-        terminus-font
+        base base-devel linux-lts linux-firmware
+        efibootmgr inotify-tools grub-btrfs snapper zram-generator
+        networkmanager reflector openssh terminus-font
         )
 
     case "$cpu" in
