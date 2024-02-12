@@ -256,6 +256,9 @@ EOF
         systemctl enable "$srv"
     done
 
+    sed -Ei 's/^(MODULES=).*/\1(btrfs)/' /etc/mkinitcpio.conf
+    mkinitcpio -P
+
     grub-mkconfig -o /boot/grub/grub.cfg
 }
 
