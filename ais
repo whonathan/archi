@@ -187,8 +187,8 @@ function base_install {
 
     genfstab -U /mnt >>/mnt/etc/fstab
     printf "[zram0]\nzram-size = ram / 2" >/mnt/etc/systemd/zram-generator.conf
-    cp -f /etc/pacman.conf /mnt/etc/pacman.conf
-    cp -f /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
+    cp -f /etc/pacman.conf /mnt/etc/
+    cp -f /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/
 }
 
 function setbase {
@@ -207,7 +207,7 @@ function setbase {
 EOF
 
     local timezone=$(curl -s http://ip-api.com/line?fields=timezone)
-    ln -sf "/usr/share/zoneinfo/$timezone" /etc/localtime && hwclock --systohc
+    ln -sf "/usr/share/zoneinfo/$timezone" /etc/localtime && hwclock --systohc --localtime
     sed -i "/^#en_US.UTF-8/s/^#//" /etc/locale.gen && locale-gen
 
     printf "LANG=en_US.UTF-8" >/etc/locale.conf
